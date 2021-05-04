@@ -4,8 +4,8 @@ The project will look at a large data set that has significant flyby. The goal o
 A good start could be to look at positional overlap within a certain time period. Whether the activity is shared can be figured out later.
 
 Goals of this project:
-Develop basic proficiency in C+
-Further develop algorithm efficiency
-Database Management
-Improve professional skills with github
+1.Develop basic proficiency in C+
+2.Further develop algorithm efficiency
+3.Database Management
+4.Improve professional skills with github
 
