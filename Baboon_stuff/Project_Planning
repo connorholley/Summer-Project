@@ -1,0 +1,31 @@
+Included in this folder are the following:
+1.Baboon_Data.csv
+2.Some poorly written c++ code to open the Baboon_Data.csv file and filter out the pertinent information. (much tougher in c++ then in python, hope it is somewhat correct)
+
+What I am considering relevent are the following:
+1. timestamp
+2. longitude
+3. latitude
+4. individual-local-identifier
+
+The goal of the program is to iterate through the csv file and create a map that uses the individual-local-identifiersas it's keys. 
+A vector of vectors that hold longitudes and latitudes for each timestamp are stored as the value for each key. 
+
+Function Design (Extra Naive version):
+
+Ideally we can see how similar the baboon paths are through using a modification of jaccard simularity: 
+  Jaccard Index = (the number in both sets) / (the number in either set) * 100
+
+The utility of exact gps data points belonging to each individual-local-identifier set might be limited so I propose that we introduce some tolerance for the longitude, latitude,
+and timestamp readings. This will provide us with overlapping cubes as a proxy for "flyby." (three dimensions being long, lat, time).
+Perhaps we introduce ±0.005 longitude and latitude for what is considered overlap? We can adjust tolerances as we go/learn more about what qualifies "closeness" in our data.
+
+Questions to consider:
+1. What tolerance do we want to give for our temporal data to be considered of the same set? Unfortunately the timestamps are not taken at consistent times when we download all
+of the data. However there is an option to download a date range of data that may give us a better gauge for how close they migrate.
+
+
+Potential directions:
+1. It may be cool to try and figure out which of the baboons movements are most consistent with the migration of the pack. Perhaps we might be able to infer some level of 
+leadership from that? Which baboon has the greatest level of jaccard simularity with all the others? For each baboon we would average their jaccard simularity with every other.
+The baboon with highest average jaccard simularity could be thought of as the herds helmsman of sorts.
