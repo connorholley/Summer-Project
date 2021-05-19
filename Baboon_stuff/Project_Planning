@@ -3,10 +3,10 @@ Included in this folder are the following:
 2.Some poorly written c++ code to open the Baboon_Data.csv file and filter out the pertinent information. (much tougher in c++ then in python, hope it is somewhat correct)
 
 What I am considering relevent are the following:
-1. timestamp
-2. longitude
-3. latitude
-4. individual-local-identifier
+1. timestamp.
+2. longitude.
+3. latitude.
+4. individual-local-identifier.
 
 The goal of the program is to iterate through the csv file and create a map that uses the individual-local-identifiersas it's keys. 
 A vector of vectors that hold longitudes and latitudes for each timestamp are stored as the value for each key. 
