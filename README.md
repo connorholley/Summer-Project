@@ -11,5 +11,5 @@ Goals of this project:
 1.Develop basic proficiency in C+
 2.Further develop algorithm efficiency
 3.Database Management
-4.Improve professional skills with github
+4.Improve professional skills with github.
 
