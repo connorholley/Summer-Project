@@ -9,10 +9,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+auto const name_index = 8u;
+using baboonMap = std::map< std::string, std::vector< std::tuple< double, double, double > > >;
 
 class Baboon_Reader {
 public:
-  map<string, vector<tuple<double,double,double>>> readFile(){
+  baboonMap readFile(){
     /*
     generates a map consisting of baboon names as keys.
     Each key has a vector listing tuples containing longitude
@@ -22,7 +24,7 @@ public:
       string line;
       ifstream myfile ("Baboon_data.csv");
       vector<string> baboon_names;
-      map<string, vector<tuple<double,double,double>>> baboon_personal_data;
+      baboonMap baboon_personal_data;
 
       if (myfile.is_open()) //opens file
       {
@@ -43,14 +45,15 @@ public:
             getline(s_stream, substr, ',');
             result.push_back(substr);
           }
-          if (find(baboon_names.begin(), baboon_names.end(),result[8]) != baboon_names.end()){
+
+          if( find( baboon_names.cbegin(), baboon_names.cend(), result[ name_index ] ) != baboon_names.cend() ){
             ;
           }else{
             /*checks to see if baboon name is already present in the baboon list.
               If not it creates an empty vector that will be added to and adds to the baboon list.
               */
-            baboon_names.push_back(result[8]);
-            baboon_personal_data[result[8]] = {};
+            baboon_names.push_back(result[name_index]);
+            baboon_personal_data[result[name_index]] = {};
           }
           tuple<double,double,double> relevant_data;
 
@@ -58,7 +61,7 @@ public:
           double longitude = atof(result[3].c_str());
           double latitude = atof(result[4].c_str());
           relevant_data= make_tuple(timestamp,longitude,latitude);// timestamp long lat
-          string baboon_name = result[8];
+          string baboon_name = result[name_index];
           baboon_personal_data[baboon_name].push_back(relevant_data);
         }
         myfile.close();
@@ -93,14 +96,14 @@ public:
         if (find(baboon_names.begin(), baboon_names.end(),result[8]) != baboon_names.end()){
           ;
         }else{
-          baboon_names.push_back(result[8]); //checks to see if baboon name is already present in the baboon list. If not it creates an empty vector that will be added to and adds to the baboon list.
+          baboon_names.push_back(result[name_index]); //checks to see if baboon name is already present in the baboon list. If not it creates an empty vector that will be added to and adds to the baboon list.
         }
       return baboon_names;
     }
     }
   }
 
-  map<string, double> jaccard_index_for_each(map<string, vector<tuple<double,double,double>>> dicty, string baboon_name ){
+  map<string, double> jaccard_index_for_each(baboonMap dicty, string baboon_name ){
     /*
     0.0001° = 11.1 m
     0.00001° = 1.11 m
@@ -124,15 +127,12 @@ public:
       for(int j = 0; j< baboon_names.size();j++){
         double totalIntersections = 0;
         for(int k =0; k< dicty[baboon_names[j]].size();k++){
-          if (get<1>(dicty[baboon_name][i])-longitude_tolerance <= get<1>(dicty[baboon_names[j]][k]) &&get<1>(dicty[baboon_names[j]][k])<=get<1>(dicty[baboon_name][i])+longitude_tolerance){
-            if (get<2>(dicty[baboon_name][i])-latitude_tolerance <= get<2>(dicty[baboon_names[j]][k]) &&get<2>(dicty[baboon_names[j]][k])<=get<2>(dicty[baboon_name][i])+latitude_tolerance){
+          if (get<1>(dicty[baboon_name][i])-longitude_tolerance <= get<1>(dicty[baboon_names[j]][k]) &&get<1>(dicty[baboon_names[j]][k])<=get<1>(dicty[baboon_name][i])+longitude_tolerance&&get<2>(dicty[baboon_name][i])-latitude_tolerance <= get<2>(dicty[baboon_names[j]][k]) &&get<2>(dicty[baboon_names[j]][k])<=get<2>(dicty[baboon_name][i])+latitude_tolerance){
               totalIntersections+=1;
             }
-          }
         }
         dictToReturn[baboon_names[j]] = totalIntersections/dicty[baboon_names[j]].size(); // here I assume (probably incorrectly) that the size of each set of timestamps are the same.
       }
-
     }
   return dictToReturn;
   }
@@ -142,7 +142,7 @@ public:
   main () {
     //declaring variables
     Baboon_Reader baboon;
-    map<string, vector<tuple<double,double,double>>> dicty = baboon.readFile();
+    baboonMap dicty = baboon.readFile();
     map<string, double> jaccard_index = baboon.jaccard_index_for_each(dicty, "F9"); //The goal here is to compare the from F9 to each other point.
 
 
